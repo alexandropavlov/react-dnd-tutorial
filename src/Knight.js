@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ItemTypes } from './Constants';
 import { DragSource } from 'react-dnd';
+import horse from './horse.png';
+
+console.log(horse);
 
 const knightSource = {
   beginDrag(props) {
@@ -13,6 +16,7 @@ function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
+    connectDragPreview: connect.dragPreview(),
   };
 }
 
@@ -20,8 +24,15 @@ function collect(connect, monitor) {
 export default class Knight extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
+    connectDragPreview: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
   };
+
+  componentDidMount() {
+    const img = new Image();
+    img.src = horse;
+    img.onload = () => this.props.connectDragPreview(img);
+  }
 
   render() {
     const { connectDragSource, isDragging } = this.props;
